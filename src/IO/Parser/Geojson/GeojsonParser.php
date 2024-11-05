@@ -34,7 +34,7 @@ class GeojsonParser extends BaseParser
             'Point' => $this->parsePoint($input['coordinates']),
             'Polygon' => $this->parsePolygon($input['coordinates']),
             'GeometryCollection' => $this->parseGeometryCollection($input),
-            'FeatureCollection' => throw new \RuntimeException('Invalid GeoJSON: The type FeatureCollection is not supported'),
+            'FeatureCollection' => $this->parseFeatureCollection($input),
             default => throw new \RuntimeException("Invalid GeoJSON: Invalid GeoJSON type $type"),
         };
     }
@@ -43,6 +43,14 @@ class GeojsonParser extends BaseParser
     {
         $geometries = $geometryCollectionData['geometries'];
         $geometries = array_map(fn (array $geometry) => $this->parse($geometry), $geometries);
+
+        return $this->factory->createGeometryCollection(Dimension::DIMENSION_2D, 4326, $geometries);
+    }
+
+    protected function parseFeatureCollection(array $geometryCollectionData): Geometry
+    {
+        $features = $geometryCollectionData['features'];
+        $geometries = array_map(fn(array $feature) => $this->parse($feature['geometry']), $features);
 
         return $this->factory->createGeometryCollection(Dimension::DIMENSION_2D, 4326, $geometries);
     }
