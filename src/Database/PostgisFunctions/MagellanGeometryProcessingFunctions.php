@@ -397,4 +397,15 @@ trait MagellanGeometryProcessingFunctions
     {
         return MagellanBaseExpression::geometry('ST_VoronoiPolygons', [GeoParam::wrap($geometry), $tolerance, GeoParam::wrap($extendToGeometry)]);
     }
+
+    /**
+     * ST_CollectionExtract Given a geometry collection, returns a homogeneous multi-geometry.
+     *
+     * @param  int  $type  The type of geometry to extract (1 = POINT, 2 = LINESTRING, 3 = POLYGON)
+     *
+     * @see https://postgis.net/docs/ST_CollectionExtract.html
+     */
+    public static function collectionExtract($geometry, int $type) {
+        return MagellanBaseExpression::geometry('ST_CollectionExtract', [GeoParam::wrap($geometry), $type]);
+    }
 }
