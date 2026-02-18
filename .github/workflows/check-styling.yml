@@ -2,9 +2,13 @@ name: Check styling
 
 on:
   push:
-    branches: [main]
+    branches:
+      - 1.x
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - 1.x
+      - main
 
 permissions:
   contents: read
@@ -15,14 +19,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.4
           tools: composer:v2
           coverage: none
 
